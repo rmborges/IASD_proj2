@@ -40,12 +40,16 @@ def complex_sentence(sentence):
 
 # convert equivalence
 def conv_equivalence(sentence):
-
+    if(sentence[0] == "<=>"):
+        new_sentence = (eval("('and')"), ('=>', sentence[1], sentence[2]), ('=>', sentence[2], sentence[1]))
+        return new_sentence
     return sentence
 
 # convert implication
 def conv_implication(sentence):
-
+    if(sentence[0] == "=>"):
+        new_sentence = (eval("('or')"), ('not', sentence[1]), sentence[2])
+        return new_sentence
     return sentence
 
 # eliminate double negation
@@ -55,14 +59,15 @@ def elim_2neg(sentence):
     return sentence
 
 # applying Morgan's law
-def morgans_law(sentence, type):
-    #if type == 'or':
-
-    #if type == 'and':
-
+def morgans_law(sentence):
+    if(sentence[0] == 'not') and (sentence[1][0] == 'or'):
+        new_sentence = (eval("('and')"), ('not', sentence[1][1]), ('not', sentence[1][2]))
+        return new_sentence
+    if(sentence[0] == 'not') and (sentence[1][0] == 'and'):
+        new_sentence = (eval("('or')"), ('not', sentence[1][1]), ('not', sentence[1][2]))
+        return new_sentence
     return sentence
 
 # applying distributive properties
 def conv_distributive(sentence):
-
     return sentence
