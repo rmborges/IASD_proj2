@@ -4,12 +4,22 @@ import sys
 
 
 # function to convert the sentences to CNF
-def convert_to_cnf(sentence):
+def convert_to_cnf(sentence, rule):
     if len(sentence) == 3:
-        convert_to_cnf(sentence[1])
-        convert_to_cnf(sentence[2])
+        if len(sentence[1]) == 3:
+            new_1 = convert_to_cnf(sentence[1], rule)
+            sentence = (sentence[0], new_1, sentence[2])
+
+        if len(sentence[2]) == 3:
+            new_2 = convert_to_cnf(sentence[2], rule)
+            sentence = (sentence[0], sentence[1], new_2)
+
+        sentence = rule(sentence)
+        return sentence
+
     else:
-        return apply_rules(sentence)
+        sentence = rule(sentence)
+        return sentence
 
 
 # function that apply rules by order
@@ -17,11 +27,6 @@ def apply_rules(sentence):
     for rule in rule_list:
         sentence = rule(sentence)
     return sentence
-
-
-# check if sentence is complex (length = 3)
-def complex_sentence(sentence):
-    return len(sentence) == 3
 
 
 # convert equivalence
@@ -72,6 +77,7 @@ def conv_distributive(sentence):
     if (sentence[0] == 'and') and (sentence[1][0] == 'or'):
         new_sentence = ('or', ('and', sentence[1][1], sentence[2]), ('and', sentence[1][2], sentence[2]))
         return new_sentence
+    return sentence
 
 
 # -------------------------------------------------
@@ -94,13 +100,12 @@ with open("sentences.txt", "r") as file:
     for line in file:
         sentence = eval(line)
         sentence_list.append(sentence)
-        print(sentence)
+        #print(sentence)
 
 # convert the sentences to CNF
 for sentence in sentence_list:
-    cnf_sentence = convert_to_cnf(sentence)
-    #teste = conv_implication(sentence)
-    print(' ',conv_distributive(sentence))
-    #print(' ',cnf_sentence)
+    for rule in rule_list:
+        sentence = convert_to_cnf(sentence, rule)
+    print(sentence)
     # append sentence in CNF to list
-    cnf_list.append(cnf_sentence)
+    cnf_list.append(sentence)
