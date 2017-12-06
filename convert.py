@@ -77,19 +77,28 @@ def morgans_law(sentence):
 
 
 # applying distributive properties
+# --------------------------------------- DEVERIAM SER SO AS COM sentence[0] = or pq as outras ja sao cnf!!!!!!!!!!!!!!!!!!!!!!!!!
 def conv_distributive(sentence):
+    # distributive complexas ----------------------------------------------
+    if (sentence[0] == 'or') and (sentence[1][0] == 'and') and (sentence[2][0] == 'and'):
+        new_sentence = ('and', ('and', ('or', sentence[1][1], sentence[2][1]), ('or', sentence[1][1], sentence[2][2])), ('and', ('or', sentence[1][2], sentence[2][1]), ('or', sentence[1][2], sentence[2][2])))
+        return new_sentence
+    #if (sentence[0] == 'and') and (sentence[1][0] == 'or') and (sentence[2][0] == 'or'):
+    #    new_sentence = ('or', ('or', ('and', sentence[1][1], sentence[2][1]), ('and', sentence[1][1], sentence[2][2])), ('or', ('and', sentence[1][2], sentence[2][1]), ('and', sentence[1][2], sentence[2][2])))
+    #    return new_sentence
+    # ---------------------------------------------------------------------
     if (sentence[0] == 'or') and (sentence[2][0] == 'and'):
         new_sentence = ('and', ('or', sentence[1], sentence[2][1]), ('or', sentence[1], sentence[2][2]))
         return new_sentence
     if (sentence[0] == 'or') and (sentence[1][0] == 'and'):
         new_sentence = ('and', ('or', sentence[1][1], sentence[2]), ('or', sentence[1][2], sentence[2]))
         return new_sentence
-    if (sentence[0] == 'and') and (sentence[2][0] == 'or'):
-        new_sentence = ('or', ('and', sentence[1], sentence[2][1]), ('and', sentence[1], sentence[2][2]))
-        return new_sentence
-    if (sentence[0] == 'and') and (sentence[1][0] == 'or'):
-        new_sentence = ('or', ('and', sentence[1][1], sentence[2]), ('and', sentence[1][2], sentence[2]))
-        return new_sentence
+    #if (sentence[0] == 'and') and (sentence[2][0] == 'or'):
+    #    new_sentence = ('or', ('and', sentence[1], sentence[2][1]), ('and', sentence[1], sentence[2][2]))
+    #    return new_sentence
+    #if (sentence[0] == 'and') and (sentence[1][0] == 'or'):
+    #    new_sentence = ('or', ('and', sentence[1][1], sentence[2]), ('and', sentence[1][2], sentence[2]))
+    #    return new_sentence
     return sentence
 
 
