@@ -10,16 +10,29 @@ def convert_to_cnf(sentence, rule):
             new_1 = convert_to_cnf(sentence[1], rule)
             sentence = (sentence[0], new_1, sentence[2])
 
+        if len(sentence[1]) == 2:
+            new_1 = rule(sentence[1])
+            sentence = (sentence[0], new_1, sentence[2])
+
         if len(sentence[2]) == 3:
             new_2 = convert_to_cnf(sentence[2], rule)
             sentence = (sentence[0], sentence[1], new_2)
 
-        sentence = rule(sentence)
-        return sentence
+        if len(sentence[2]) == 2:
+            new_2 = rule(sentence[2])
+            sentence = (sentence[0], sentence[1], new_2)
 
-    else:
-        sentence = rule(sentence)
-        return sentence
+    if len(sentence) == 2:
+        if len(sentence[1]) == 3:
+            new_1 = convert_to_cnf(sentence[1], rule)
+            sentence = (sentence[0], new_1)
+
+        if len(sentence[1]) == 2:
+            new_1 = rule(sentence[1])
+            sentence = (sentence[0], new_1)
+
+    sentence = rule(sentence)
+    return sentence
 
 
 # function that apply rules by order
@@ -87,7 +100,7 @@ def conv_distributive(sentence):
 
 sentence_list = []
 cnf_list = []
-rule_list = [conv_equivalence, conv_implication, elim_2neg, morgans_law, conv_distributive]
+rule_list = [conv_equivalence, conv_implication, elim_2neg, morgans_law, conv_distributive] #VERIFICAR: POR DISTRIBUIVA COMPLEXA OU FAZER EM 2 PASSOS?
 
 # read the input - ESTE É O CERTO! (FUNCIONA)
 #for line in sys.stdin.readlines():
