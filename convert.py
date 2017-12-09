@@ -117,17 +117,27 @@ def output_format(sentence):
             new_1 = output_format(sentence[1])
             new_2 = output_format(sentence[2])
 
-            out_1 = ''
-            out_2 = ''
-            for sent in new_1:
-                out_1 += sent + ', '
-            out_1 = out_1[0:-2] # remove virgula e espaço a mais
-            output_list.append('[' + out_1 + ']')
+            if len(new_1) == 2:  # and
+                for sent in new_1:
+                    output_list.append(sent)
 
-            for sent in new_2:
-                out_2 += sent + ', '
-            out_2 = out_2[0:-2]  # remove virgula e espaço a mais
-            output_list.append('[' + out_2 + ']')
+            if len(new_1) == 1:
+                out_1 = ''
+                for sent in new_1:
+                    out_1 += sent + ', '
+                out_1 = out_1[0:-2]  # remove virgula e espaço a mais
+                output_list.append(out_1)
+
+            if len(new_2) == 2:  # and
+                for sent in new_2:
+                    output_list.append(sent)
+
+            if len(new_2) == 1:
+                out_2 = ''
+                for sent in new_2:
+                    out_2 += sent + ', '
+                out_2 = out_2[0:-2]  # remove virgula e espaço a mais
+                output_list.append(out_2)
 
             return output_list
 
@@ -135,11 +145,19 @@ def output_format(sentence):
             new_1 = output_format(sentence[1])
             new_2 = output_format(sentence[2])
 
+            out_1 = ''
+            out_2 = ''
             for sent in new_1:
-                output_list.append(sent)
+                out_1 += sent + ', '
+            #out_1 = out_1[0:-2]  # remove virgula e espaço a mais
+            #output_list.append('[' + out_1 + ']')
 
             for sent in new_2:
-                output_list.append(sent)
+                out_1 += sent + ', '
+            out_1 = out_1[0:-2]  # remove virgula e espaço a mais
+            out_1 = out_1.replace('[','') # remove [ dos 'or' interiores
+            out_1 = out_1.replace(']', '') # remove ] dos 'or' interiores
+            output_list.append('[' + out_1 + ']')
 
             return output_list
 
