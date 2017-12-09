@@ -101,6 +101,48 @@ def conv_distributive(sentence):
     #    return new_sentence
     return sentence
 
+def output_format(sentence):
+    output_list = []
+
+    if len(sentence) == 1:
+        output_list.append("'" + str(sentence) + "'") # para ficar com plicas
+        return output_list
+
+    elif len(sentence) == 2: # com [ ] ou juntar com caso len()=1 ????????????
+        output_list.append(str(sentence))
+        return output_list
+
+    else:
+        if sentence[0] == 'and':
+            new_1 = output_format(sentence[1])
+            new_2 = output_format(sentence[2])
+
+            out_1 = ''
+            out_2 = ''
+            for sent in new_1:
+                out_1 += sent + ', '
+            out_1 = out_1[0:-2] # remove virgula e espaço a mais
+            output_list.append('[' + out_1 + ']')
+
+            for sent in new_2:
+                out_2 += sent + ', '
+            out_2 = out_2[0:-2]  # remove virgula e espaço a mais
+            output_list.append('[' + out_2 + ']')
+
+            return output_list
+
+        if sentence[0] == 'or':
+            new_1 = output_format(sentence[1])
+            new_2 = output_format(sentence[2])
+
+            for sent in new_1:
+                output_list.append(sent)
+
+            for sent in new_2:
+                output_list.append(sent)
+
+            return output_list
+
 
 # -------------------------------------------------
 
@@ -108,7 +150,9 @@ def conv_distributive(sentence):
 
 
 sentence_list = []
+converted_list = []
 cnf_list = []
+# ordered list with functions
 rule_list = [conv_equivalence, conv_implication, elim_2neg, morgans_law, conv_distributive] #VERIFICAR: POR DISTRIBUIVA COMPLEXA OU FAZER EM 2 PASSOS?
 
 # read the input - ESTE É O CERTO! (FUNCIONA)
@@ -126,8 +170,17 @@ with open("sentences.txt", "r") as file:
 
 # convert the sentences to CNF
 for sentence in sentence_list:
+    # applying rules by order
     for rule in rule_list:
         sentence = convert_to_cnf(sentence, rule)
+    # append sentence to list
+    converted_list.append(sentence)
+
+#  change to the desired output format
+for sentence in converted_list:
     print(sentence)
-    # append sentence in CNF to list
-    cnf_list.append(sentence)
+    result_list = output_format(sentence)
+    if result_list:
+        for sent in result_list:
+            print('>>', sent)
+        cnf_list += result_list
