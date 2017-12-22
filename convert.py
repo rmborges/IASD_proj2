@@ -155,7 +155,7 @@ sentence_list = []
 converted_list = []
 cnf_list = []
 # ordered list with functions
-rule_list = [conv_equivalence, conv_implication, elim_2neg, morgans_law, conv_distributive] #VERIFICAR: POR DISTRIBUIVA COMPLEXA OU FAZER EM 2 PASSOS?
+rule_list = [elim_2neg, conv_equivalence, elim_2neg, conv_implication, elim_2neg, morgans_law, elim_2neg, conv_distributive, elim_2neg] #VERIFICAR: POR DISTRIBUIVA COMPLEXA OU FAZER EM 2 PASSOS?
 
 # read the input - ESTE É O CERTO! (FUNCIONA)
 #for line in sys.stdin.readlines():
@@ -170,17 +170,28 @@ with open("sentences.txt", "r") as file:
         sentence_list.append(sentence)
         #print(sentence)
 
+#FORMA ANTIGA
 # convert the sentences to CNF
+#for sentence in sentence_list:
+#    # applying rules by order
+#    for rule in rule_list:
+#        sentence = convert_to_cnf(sentence, rule)
+#    # append sentence to list
+#    converted_list.append(sentence)
+
+#FORMA NOVA
 for sentence in sentence_list:
-    # applying rules by order
     for rule in rule_list:
-        sentence = convert_to_cnf(sentence, rule)
-    # append sentence to list
+        while 1:
+            new = convert_to_cnf(sentence, rule)
+            if new == sentence:
+                break
+            sentence = new
     converted_list.append(sentence)
+
 
 #  change to the desired output format
 for sentence in converted_list:
-    print(sentence)
     result_list = output_format(sentence)
     if result_list:
         for sent in result_list:
