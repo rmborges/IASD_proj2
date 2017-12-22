@@ -156,7 +156,7 @@ for line in sys.stdin.readlines():
 for sentence in sentence_list:
     # applying rules by order
     for rule in rule_list:
-        # keep same rule while changing result of convert_to_cnf
+        # keep the same rule while changing result of convert_to_cnf
         while 1:
             new = convert_to_cnf(sentence, rule)
             if new == sentence:

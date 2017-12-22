@@ -17,7 +17,7 @@ class Atom:
         return 0
 
 
-# Reading File
+# takes a sentence and creates a list of atoms
 def convert_to_atoms(sentence):
     atom_list=[]
     if(isinstance(sentence, str)):
@@ -34,6 +34,7 @@ def convert_to_atoms(sentence):
 
 
 # Sentence Functions
+# checks if a sentence in a list
 def sent_in_list(sentence, sentence_list):
     for sent in sentence_list:
         if len(sent) == len(sentence):
@@ -47,17 +48,20 @@ def sent_in_list(sentence, sentence_list):
     return False
 
 
+# removes all elements of a list
 def clear_list(list):
     N=len(list)
     for i in range(N):
         list.remove(list[0])
 
 
+# adds a list of atoms to another list
 def sent_attach(main_sent,new_block):
     for atom in new_block:
         main_sent.append(atom)
 
 
+# checks if an atom is in a sentence
 def search_atom(sentence,atom):
     for atom_s in sentence:
         if (atom.is_equal(atom_s)):
@@ -65,6 +69,7 @@ def search_atom(sentence,atom):
     return 0
 
 
+# verifies if a sentence contains an atom and its negation
 def is_trivial(sentence):
     for atom1 in sentence:
         for atom2 in sentence:
@@ -73,6 +78,7 @@ def is_trivial(sentence):
     return 0
 
 
+# verifies if s1 in contained in s2
 def s1_in_s2(sent1,sent2):
     for atom in sent1:
         if not search_atom(sent2,atom):
@@ -80,6 +86,7 @@ def s1_in_s2(sent1,sent2):
     return 1
 
 
+# verifies if an atom in a sentence is negated in another
 def resol_possible(sent1,sent2):
     for atom1 in sent1:
         for atom2 in sent2:
@@ -89,12 +96,14 @@ def resol_possible(sent1,sent2):
 
 
 # List Functions
+# substitutes list1 by list2
 def replace(list1,list2):
     clear_list(list1)
     if len(list2)!=0:
         sent_attach(list1,list2)
 
 
+# orders a list by size of sublists (with bubble sort)
 def order_by_size(sentence_list):
     aux = []
     troca = 1
@@ -108,6 +117,7 @@ def order_by_size(sentence_list):
                 troca = 1
 
 
+# removes trivial sentences from a list
 def clean_trivial(sentence_list):
     new=[]
     for sentence in sentence_list:
@@ -117,6 +127,7 @@ def clean_trivial(sentence_list):
     sent_attach(sentence_list,new)
 
 
+# removes sentences that have a subset in a list
 def clean_repeated(sentence_list):
     new=[]
 
@@ -138,6 +149,7 @@ def clean_repeated(sentence_list):
 
 
 # Algorithm Functions
+# applies resolution
 def resolution(sent1,sent2):
     new_sent=[]
     for atom1 in sent1:
@@ -151,6 +163,7 @@ def resolution(sent1,sent2):
     return new_sent
 
 
+# applies factoring
 def factoring(sentence):
     new = []
     for atom in sentence:
@@ -160,6 +173,7 @@ def factoring(sentence):
         replace(sentence, new)
 
 
+# main function of the theorem prover (explained in the report)
 def cnf_solver(sentence_list):
     new=[]
     while(len(sentence_list)>1):
@@ -209,7 +223,7 @@ order_by_size(sentence_list)
 for sentence in sentence_list:
     factoring(sentence)
 
-# solve the theorem prover
+# theorem prover
 result = cnf_solver(sentence_list)
 
 print(result)
