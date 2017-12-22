@@ -145,11 +145,9 @@ def output_format(sentence):
 
             return output_list
 
-
 # -------------------------------------------------
 
 # MAIN
-
 
 sentence_list = []
 converted_list = []
@@ -168,18 +166,7 @@ with open("sentences.txt", "r") as file:
     for line in file:
         sentence = eval(line)
         sentence_list.append(sentence)
-        #print(sentence)
 
-#FORMA ANTIGA
-# convert the sentences to CNF
-#for sentence in sentence_list:
-#    # applying rules by order
-#    for rule in rule_list:
-#        sentence = convert_to_cnf(sentence, rule)
-#    # append sentence to list
-#    converted_list.append(sentence)
-
-#FORMA NOVA
 for sentence in sentence_list:
     for rule in rule_list:
         while 1:
@@ -195,5 +182,5 @@ for sentence in converted_list:
     result_list = output_format(sentence)
     if result_list:
         for sent in result_list:
-            print('>>', sent)
+            print(sent)
         cnf_list += result_list
