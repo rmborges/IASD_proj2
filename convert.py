@@ -5,32 +5,41 @@ import sys
 
 # recursive function to convert the sentences to CNF, applying the given rule
 def convert_to_cnf(sentence, rule):
+    # sentence is complex
     if len(sentence) == 3:
+        # 1st subsentence is complex
         if len(sentence[1]) == 3:
             new_1 = convert_to_cnf(sentence[1], rule)
             sentence = (sentence[0], new_1, sentence[2])
 
+        # 1st subsentence is negation
         if len(sentence[1]) == 2:
             new_1 = rule(sentence[1])
             sentence = (sentence[0], new_1, sentence[2])
 
+        # 2nd subsentence is complex
         if len(sentence[2]) == 3:
             new_2 = convert_to_cnf(sentence[2], rule)
             sentence = (sentence[0], sentence[1], new_2)
 
+        # 2nd subsentence is negation
         if len(sentence[2]) == 2:
             new_2 = rule(sentence[2])
             sentence = (sentence[0], sentence[1], new_2)
 
+    # sentence is negation
     if len(sentence) == 2:
+        # subsentence is complex
         if len(sentence[1]) == 3:
             new_1 = convert_to_cnf(sentence[1], rule)
             sentence = (sentence[0], new_1)
 
+        # subsentence is negation
         if len(sentence[1]) == 2:
             new_1 = rule(sentence[1])
             sentence = (sentence[0], new_1)
 
+    # apply rule to sentence
     sentence = rule(sentence)
     return sentence
 
