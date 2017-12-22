@@ -2,7 +2,6 @@ import sys
 
 # FUNCTIONS
 
-
 # function to convert the sentences to CNF
 def convert_to_cnf(sentence, rule):
     if len(sentence) == 3:
@@ -32,13 +31,6 @@ def convert_to_cnf(sentence, rule):
             sentence = (sentence[0], new_1)
 
     sentence = rule(sentence)
-    return sentence
-
-
-# function that apply rules by order
-def apply_rules(sentence):
-    for rule in rule_list:
-        sentence = rule(sentence)
     return sentence
 
 
@@ -77,28 +69,16 @@ def morgans_law(sentence):
 
 
 # applying distributive properties
-# --------------------------------------- DEVERIAM SER SO AS COM sentence[0] = or pq as outras ja sao cnf!!!!!!!!!!!!!!!!!!!!!!!!!
 def conv_distributive(sentence):
-    # distributive complexas ----------------------------------------------
     if (sentence[0] == 'or') and (sentence[1][0] == 'and') and (sentence[2][0] == 'and'):
         new_sentence = ('and', ('and', ('or', sentence[1][1], sentence[2][1]), ('or', sentence[1][1], sentence[2][2])), ('and', ('or', sentence[1][2], sentence[2][1]), ('or', sentence[1][2], sentence[2][2])))
         return new_sentence
-    #if (sentence[0] == 'and') and (sentence[1][0] == 'or') and (sentence[2][0] == 'or'):
-    #    new_sentence = ('or', ('or', ('and', sentence[1][1], sentence[2][1]), ('and', sentence[1][1], sentence[2][2])), ('or', ('and', sentence[1][2], sentence[2][1]), ('and', sentence[1][2], sentence[2][2])))
-    #    return new_sentence
-    # ---------------------------------------------------------------------
     if (sentence[0] == 'or') and (sentence[2][0] == 'and'):
         new_sentence = ('and', ('or', sentence[1], sentence[2][1]), ('or', sentence[1], sentence[2][2]))
         return new_sentence
     if (sentence[0] == 'or') and (sentence[1][0] == 'and'):
         new_sentence = ('and', ('or', sentence[1][1], sentence[2]), ('or', sentence[1][2], sentence[2]))
         return new_sentence
-    #if (sentence[0] == 'and') and (sentence[2][0] == 'or'):
-    #    new_sentence = ('or', ('and', sentence[1], sentence[2][1]), ('and', sentence[1], sentence[2][2]))
-    #    return new_sentence
-    #if (sentence[0] == 'and') and (sentence[1][0] == 'or'):
-    #    new_sentence = ('or', ('and', sentence[1][1], sentence[2]), ('and', sentence[1][2], sentence[2]))
-    #    return new_sentence
     return sentence
 
 def output_format(sentence):
@@ -108,7 +88,7 @@ def output_format(sentence):
         output_list.append("'" + str(sentence) + "'") # para ficar com plicas
         return output_list
 
-    elif len(sentence) == 2: # com [ ] ou juntar com caso len()=1 ????????????
+    elif len(sentence) == 2:
         output_list.append(str(sentence))
         return output_list
 
@@ -153,19 +133,18 @@ sentence_list = []
 converted_list = []
 cnf_list = []
 # ordered list with functions
-rule_list = [elim_2neg, conv_equivalence, elim_2neg, conv_implication, elim_2neg, morgans_law, elim_2neg, conv_distributive, elim_2neg] #VERIFICAR: POR DISTRIBUIVA COMPLEXA OU FAZER EM 2 PASSOS?
+rule_list = [elim_2neg, conv_equivalence, elim_2neg, conv_implication, elim_2neg, morgans_law, elim_2neg, conv_distributive, elim_2neg]
 
-# read the input - ESTE É O CERTO! (FUNCIONA)
-#for line in sys.stdin.readlines():
-#    sentence = eval(line)
-#    print(sentence)
-#    sentence_list.append(sentence)
+# read input
+for line in sys.stdin.readlines():
+    sentence = eval(line)
+    sentence_list.append(sentence)
 
 # read input - para testar sem linha de comandos
-with open("sentences.txt", "r") as file:
-    for line in file:
-        sentence = eval(line)
-        sentence_list.append(sentence)
+#with open("sentences.txt", "r") as file:
+#    for line in file:
+#        sentence = eval(line)
+#        sentence_list.append(sentence)
 
 for sentence in sentence_list:
     for rule in rule_list:

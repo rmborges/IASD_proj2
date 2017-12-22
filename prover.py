@@ -33,16 +33,6 @@ def convert_to_atoms(sentence):
     return atom_list
 
 
-def read_file(cnffile):
-    sentence_list=[]
-    with open(cnffile, "r") as file:
-        for line in file:
-            sentence = eval(line)
-            atom_list = convert_to_atoms(sentence)
-            sentence_list.append(atom_list)
-    return sentence_list
-
-
 # Sentence Functions
 def clear_list(list):
     N=len(list)
@@ -183,22 +173,23 @@ def cnf_solver(sentence_list):
         if test==0:
             return False
 
-        clean_trivial(sentence_list)
         clean_repeated(sentence_list)
         order_by_size(sentence_list)
 
     return False
 
 
-
+# -------------------------------------
 
 # MAIN
 
 sentence_list = []
-file = sys.argv[1]
 
-# read the file
-sentence_list = read_file(file)
+# read input
+for line in sys.stdin.readlines():
+    sentence = eval(line)
+    atom_list = convert_to_atoms(sentence)
+    sentence_list.append(atom_list)
 
 # simplify the input list
 clean_trivial(sentence_list)
@@ -211,6 +202,3 @@ for sentence in sentence_list:
 result = cnf_solver(sentence_list)
 
 print(result)
-
-
-
