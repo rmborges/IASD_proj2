@@ -34,6 +34,19 @@ def convert_to_atoms(sentence):
 
 
 # Sentence Functions
+def sent_in_list(sentence, sentence_list):
+    for sent in sentence_list:
+        if len(sent) == len(sentence):
+            teste = 1
+            for atom in sentence:
+                if not search_atom(sent, atom):
+                    teste = 0
+                    break
+            if teste == 1:
+                return True
+    return False
+
+
 def clear_list(list):
     N=len(list)
     for i in range(N):
@@ -163,13 +176,11 @@ def cnf_solver(sentence_list):
                     new=resolution(sent1,sent2)
                     if (len(new)==0):
                         return True
-                    sentence_list.remove(sent1)
-                    sentence_list.remove(sent2)
                     factoring(new)
-                    if not is_trivial(new):
+                    if not is_trivial(new) and not sent_in_list(new, sentence_list):
                         sentence_list.append(new)
-                    test = 1
-                    break
+                        test = 1
+                        break
         if test==0:
             return False
 
