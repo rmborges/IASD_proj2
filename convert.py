@@ -2,7 +2,8 @@ import sys
 
 # FUNCTIONS
 
-# function to convert the sentences to CNF
+
+# recursive function to convert the sentences to CNF, applying the given rule
 def convert_to_cnf(sentence, rule):
     if len(sentence) == 3:
         if len(sentence[1]) == 3:
@@ -81,6 +82,8 @@ def conv_distributive(sentence):
         return new_sentence
     return sentence
 
+
+# function to convert sentences to the desired output format
 def output_format(sentence):
     output_list = []
 
@@ -131,7 +134,7 @@ def output_format(sentence):
 
 sentence_list = []
 converted_list = []
-cnf_list = []
+
 # ordered list with functions
 rule_list = [elim_2neg, conv_equivalence, elim_2neg, conv_implication, elim_2neg, morgans_law, elim_2neg, conv_distributive, elim_2neg]
 
@@ -140,26 +143,23 @@ for line in sys.stdin.readlines():
     sentence = eval(line)
     sentence_list.append(sentence)
 
-# read input - para testar sem linha de comandos
-#with open("sentences.txt", "r") as file:
-#    for line in file:
-#        sentence = eval(line)
-#        sentence_list.append(sentence)
-
+# conversion to cnf
 for sentence in sentence_list:
+    # applying rules by order
     for rule in rule_list:
+        # keep same rule while changing result of convert_to_cnf
         while 1:
             new = convert_to_cnf(sentence, rule)
             if new == sentence:
                 break
             sentence = new
+    # store converted sentences
     converted_list.append(sentence)
 
 
-#  change to the desired output format
+#  change to the desired output format and print results
 for sentence in converted_list:
     result_list = output_format(sentence)
     if result_list:
         for sent in result_list:
             print(sent)
-        cnf_list += result_list
